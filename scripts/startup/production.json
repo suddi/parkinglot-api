@@ -1,0 +1,15 @@
+[
+    {
+        "name": "parkinglot",
+        "script": "app.js",
+        "log_date_format": "YYYY-MM-DD HH:mm:ss:SSS Z",
+        "env": {
+            "NODE_ENV": "production"
+        },
+        "min_uptime": 1000,
+        "max_restarts": 2,
+        "out_file": "./log/out.log",
+        "error_file": "./log/error.log",
+        "exec_mode": "fork_mode"
+    }
+]

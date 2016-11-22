@@ -1,0 +1,23 @@
+# parkinglot-db:
+#     container_name: parkinglot-db
+#     image: mysql
+#     ports:
+#         - "3306:3306"
+#     volumes_from:
+#         - parkinglot-storage
+
+parkinglot-cache:
+    container_name: parkinglot-cache
+    image: redis
+    ports:
+        - "6379:6379"
+    volumes_from:
+        - parkinglot-storage
+
+# It is recommended to use a separate container for data volumes.
+# This provides some benefits, for e.g., the db container can be upgraded without affecting the data
+parkinglot-storage:
+    container_name: parkinglot-storage
+    image: busybox
+    volumes:
+        - "./data:/data"
