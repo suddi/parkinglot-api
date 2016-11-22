@@ -6,12 +6,24 @@ const expect = require('chai').expect;
 const Config = require('../../config');
 const Util = require('../../utils');
 
-const dropTable = function* (parameterizedValues) {
+function getConnectionConfig() {
+    if (Config.Env.CI) {
+        return {
+            host: 'localhost',
+            user: 'root',
+            database: 'parkinglot',
+            connectionLimit: 10
+        };
+    }
+    return Config.Db.MYSQL_CONNECTION;
+}
+
+function* dropTable(parameterizedValues) {
     const query = 'DROP TABLE IF EXISTS example;';
     yield Util.Db.execute(query, parameterizedValues);
-};
+}
 
-const createTableQuery = function* (parameterizedValues) {
+function* createTableQuery(parameterizedValues) {
     const query =
         'CREATE TABLE example (' +
             '`id` int(4) NOT NULL, ' +
@@ -20,35 +32,35 @@ const createTableQuery = function* (parameterizedValues) {
     const result = yield Util.Db.execute(query, parameterizedValues);
 
     expect(result.affectedRows).to.eql(0);
-};
+}
 
-const insertQuery = function* (parameterizedValues) {
+function* insertQuery(parameterizedValues) {
     const query = 'INSERT INTO example (id) VALUES (?);';
     const result = yield Util.Db.execute(query, parameterizedValues);
 
     expect(result.affectedRows).to.eql(1);
-};
+}
 
-const selectQuery = function* (parameterizedValues, expectedValue) {
+function* selectQuery(parameterizedValues, expectedValue) {
     const query = 'SELECT * FROM example;';
     const result = yield Util.Db.execute(query, parameterizedValues);
 
     expect(result.length).to.eql(1);
     expect(result[0].id).to.eql(expectedValue);
-};
+}
 
-const selectWhereQuery = function* (parameterizedValues, expectedValue) {
+function* selectWhereQuery(parameterizedValues, expectedValue) {
     const query = 'SELECT * FROM example WHERE id = ?;';
     const result = yield Util.Db.execute(query, parameterizedValues);
 
     expect(result.length).to.eql(1);
     expect(result[0].id).to.eql(expectedValue);
-};
+}
 
 describe('Testing Util.Db', function () {
     describe('Testing Util.Db.connect', function () {
         it('CASE 1: Able to get pool given config', function () {
-            const result = Util.Db.connect(Config.Db.MYSQL_CONNECTION);
+            const result = Util.Db.connect(getConnectionConfig());
 
             expect(result).to.not.be.undefined; // eslint-disable-line no-unused-expressions
 
@@ -59,7 +71,7 @@ describe('Testing Util.Db', function () {
     describe('Testing Util.Db.execute', function () {
         it('CASE 1: Able to execute query successfully', function* () {
             // Repeating connection, so that tests are isolated
-            Util.Db.connect(Config.Db.MYSQL_CONNECTION);
+            Util.Db.connect(getConnectionConfig());
             const input = 42;
 
             yield dropTable();
@@ -73,7 +85,7 @@ describe('Testing Util.Db', function () {
 
         it('CASE 2: Protected against SQL injection using parameterizedValues', function* () {
             // Repeating connection, so that tests are isolated
-            Util.Db.connect(Config.Db.MYSQL_CONNECTION);
+            Util.Db.connect(getConnectionConfig());
             const input1 = 42;
             const input2 = 43;
 
@@ -89,7 +101,7 @@ describe('Testing Util.Db', function () {
 
         it('CASE 3: Connection throws error', function* () {
             // Repeating connection, so that tests are isolated
-            Util.Db.connect(Config.Db.MYSQL_CONNECTION);
+            Util.Db.connect(getConnectionConfig());
             let error;
 
             try {
