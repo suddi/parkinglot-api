@@ -1,7 +1,5 @@
 'use strict';
 
-const _ = require('lodash');
-
 const Enum = require('../../../enum');
 const Model = require('../model');
 

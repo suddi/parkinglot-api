@@ -1,7 +1,5 @@
 'use strict';
 
-const _ = require('lodash');
-
 const Utils = require('../../../utils');
 
 module.exports.create = function* (data) {

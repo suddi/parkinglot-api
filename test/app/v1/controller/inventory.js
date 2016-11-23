@@ -1,5 +1,6 @@
 'use strict';
 
+require('co-mocha');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
@@ -8,13 +9,15 @@ const Model = require('../../../../app/v1/model');
 const Enum = require('../../../../enum');
 
 describe('Testing Controller.Inventory', function () {
+    let sandbox;
+
     beforeEach(function () {
-        this.sandbox = sinon.sandbox.create();
-    }.bind(this));
+        sandbox = sinon.sandbox.create();
+    });
 
     afterEach(function () {
-        this.sandbox.restore();
-    }.bind(this));
+        sandbox.restore();
+    });
 
     it('CASE 1: Flow handled correctly', function* () {
         const input = 42;
@@ -25,7 +28,7 @@ describe('Testing Controller.Inventory', function () {
             hoursPassed: input
         };
 
-        const mock = this.sandbox.mock(Model.Car);
+        const mock = sandbox.mock(Model.Car);
         mock.expects('calculateEarning').once().withArgs(input).returns(Promise.resolve(body));
 
         const execute = Controller.Inventory.get.bind(this);
@@ -33,7 +36,7 @@ describe('Testing Controller.Inventory', function () {
 
         expect(this.body.status).to.deep.eql(Enum.Status.OK);
         expect(this.body.data).to.deep.eql(body);
-    }.bind(this));
+    });
 
     it('CASE 2: params.hoursPassed is not passed', function* () {
         const input = 42;
@@ -42,7 +45,7 @@ describe('Testing Controller.Inventory', function () {
         };
         this.params = {};
 
-        const mock = this.sandbox.mock(Model.Car);
+        const mock = sandbox.mock(Model.Car);
         mock.expects('calculateEarning').once().withArgs(0).returns(Promise.resolve(body));
 
         const execute = Controller.Inventory.get.bind(this);
