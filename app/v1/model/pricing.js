@@ -6,7 +6,6 @@ module.exports.create = function* (data) {
     const query =
         'INSERT IGNORE INTO pricing (id, standardPricingInCents, discountPricingInCents, ' +
         'discountAppliedAfter, validFrom, validUntil) VALUES (?, ?, ?, ?, ?, ?);';
-    console.log(data);
     const parameteriezedValues = [
         data.id,
         data.standardPricingInCents,

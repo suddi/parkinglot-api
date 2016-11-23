@@ -49,6 +49,7 @@
     "load-directory": "^1.1.12",
     "lodash": "^4.16.6",
     "moment": "^2.16.0",
+    "nodemon": "^1.11.0",
     "promise-mysql": "^2.0.0",
     "xml2js": "^0.4.17"
   },

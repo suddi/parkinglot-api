@@ -38,7 +38,7 @@ describe('Integration Tests for Model.Credentials', function () {
         });
 
         it('CASE 3: Credentials is validated correctly', function* () {
-            const apiKey = 'abc';
+            const apiKey = 42;
             yield DbUtil.insert(TABLENAME, [apiKey]);
 
             const result = yield Model.Credentials.authenticate(apiKey);

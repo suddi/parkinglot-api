@@ -8,9 +8,4 @@ wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | 
 . $NVM_DIR/nvm.sh
 nvm install $NODE_VERSION
 nvm alias default $NODE_VERSION
-npm install -g \
-    nodemon \
-    pm2 \
-    eslint \
-    mocha \
-    istanbul
+npm install -g pm2

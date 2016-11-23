@@ -13,7 +13,13 @@ module.exports.getConnectionConfig = function () {
             connectionLimit: 10
         };
     }
-    return Config.Db.MYSQL_CONNECTION_FOR_TESTING;
+    return {
+        host: 'localhost',
+        user: 'root',
+        password: 'root',
+        port: 3306,
+        connectionLimit: 10
+    };
 };
 
 module.exports.createDb = function* (dbname) {
