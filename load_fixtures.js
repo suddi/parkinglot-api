@@ -13,8 +13,7 @@ function mapCarToCamelCase(record) {
         brand: record.brand,
         licensePlate: record.licensePlate || record.licenseplate,
         parkingLotId: record.parkingLotId || record.parkinglotid,
-        parkingTime: record.parkingTime || record.parkingtime,
-        pricingId: Config.Db.DEFAULT_PRICING.id
+        parkingTime: record.parkingTime || record.parkingtime
     };
 }
 

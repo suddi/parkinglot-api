@@ -9,12 +9,17 @@ function getStatusEnums() {
 
         'UNAUTHORIZED': {
             code: 401,
-            message: 'Invalid URL or API Key'
+            message: 'Invalid URL Or API Key'
         },
 
         'TOO_MANY_REQUESTS': {
             code: 429,
             message: 'Too Many Requests'
+        },
+
+        'FORBIDDEN': {
+            code: 403,
+            message: 'The Requested Action Cannot Be Performed'
         },
 
         'INTERNAL_ERROR': {

@@ -110,7 +110,7 @@ describe('Testing Util.Db', function () {
                 error = err;
             }
 
-            expect(error.message.split(':')[0]).to.be.eql('ER_NO_SUCH_TABLE');
+            expect(error.code).to.be.eql('ER_NO_SUCH_TABLE');
 
             Util.Db.disconnect();
         });

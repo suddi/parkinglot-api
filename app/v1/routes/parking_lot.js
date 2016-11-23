@@ -8,4 +8,9 @@ module.exports = function (router) {
         Middleware.Authentication.validate,
         Controller.ParkingLot.get
     );
+
+    router.post('/parkinglots/:parkingLotId/cars',
+        Middleware.Authentication.validate,
+        Controller.ParkingLot.post
+    );
 };

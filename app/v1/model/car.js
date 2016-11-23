@@ -4,17 +4,19 @@ const _ = require('lodash');
 const moment = require('moment');
 
 const Config = require('../../../config');
+const Enum = require('../../../enum');
 const Utils = require('../../../utils');
 
 function getValuesForCreateRecord(record) {
     const momentParkingTime = moment.utc(record.parkingTime);
+    const unixtime = momentParkingTime.valueOf() / 1000;
     return [
-        record.licensePlate + '-' + momentParkingTime.valueOf(),
+        record.licensePlate + '-' + unixtime,
         record.brand,
         record.licensePlate,
         record.parkingLotId,
         momentParkingTime.format(Config.Time.INPUT_FORMAT),
-        record.pricingId
+        Config.Db.DEFAULT_PRICING.id
     ];
 }
 
@@ -23,7 +25,11 @@ module.exports.create = function* (record) {
         'INSERT INTO cars (id, brand, licensePlate, ' +
         'parkingLotId, parkingTime, pricingId) VALUES (?, ?, ?, ?, ?, ?);';
     const parameterizedValues = getValuesForCreateRecord(record);
-    return yield Utils.Db.execute(query, parameterizedValues);
+    const result = yield Utils.Db.execute(query, parameterizedValues);
+    if (!result.affectedRows) {
+        throw Enum.Status.INTERNAL_ERROR;
+    }
+    return record;
 };
 
 module.exports.bulkCreate = function* (records) {
@@ -32,7 +38,11 @@ module.exports.bulkCreate = function* (records) {
     const query =
         'INSERT INTO cars (id, brand, licensePlate, ' +
         'parkingLotId, parkingTime, pricingId) VALUES' + subquery.replace(/,$/, ';');
-    return yield Utils.Db.execute(query, _.flatten(parameterizedValues));
+    const result = yield Utils.Db.execute(query, _.flatten(parameterizedValues));
+    if (!result.affectedRows) {
+        throw Enum.Status.INTERNAL_ERROR;
+    }
+    return records;
 };
 
 module.exports.calculateEarningByParkingLotId = function* (parkingLotId, hoursPassed) {
