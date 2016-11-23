@@ -21,10 +21,8 @@ function mapCarToCamelCase(record) {
 function* importFixtures(data) {
     const records = _.get(data, 'cars.car', []);
     yield Model.Pricing.create(Config.Db.DEFAULT_PRICING);
-    for (const record of records) {
-        const camelCaseRecord = mapCarToCamelCase(record);
-        yield Model.Car.create(camelCaseRecord);
-    }
+    const camelCaseRecord = records.map(mapCarToCamelCase);
+    yield Model.Car.bulkCreate(camelCaseRecord);
     console.log('Successfully imported ' + records.length + ' records ');
 }
 
@@ -35,17 +33,16 @@ function* readXml(filename) {
 }
 
 function* load() {
-    const filenames = process.argv.slice(2);
-    for (const filename of filenames) {
-        const data = yield readXml(filename);
-        yield importFixtures(data);
-    }
+    const filename = process.argv[2];
+    const data = yield readXml(filename);
+    yield importFixtures(data);
 }
 
 if (!module.parent) {
     co(function* () {
         Utils.Db.connect(Config.Db.MYSQL_CONNECTION);
         yield load();
+        Utils.Db.disconnect();
     }).catch(function (err) {
         console.log('Failed to load fixtures');
         console.log(err.message);

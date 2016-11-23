@@ -1,33 +1,46 @@
 'use strict';
 
+const _ = require('lodash');
 const moment = require('moment');
 
 const Config = require('../../../config');
 const Utils = require('../../../utils');
 
-module.exports.create = function* (data) {
-    const momentParkingTime = moment.utc(data.parkingTime);
+function getValuesForCreateRecord(record) {
+    const momentParkingTime = moment.utc(record.parkingTime);
+    return [
+        record.licensePlate + '-' + momentParkingTime.valueOf(),
+        record.brand,
+        record.licensePlate,
+        record.parkingLotId,
+        momentParkingTime.format(Config.Time.INPUT_FORMAT),
+        record.pricingId
+    ];
+}
 
+module.exports.create = function* (record) {
     const query =
         'INSERT INTO cars (id, brand, licensePlate, ' +
         'parkingLotId, parkingTime, pricingId) VALUES (?, ?, ?, ?, ?, ?);';
-    const parameteriezedValues = [
-        data.licensePlate + '-' + momentParkingTime.valueOf(),
-        data.brand,
-        data.licensePlate,
-        data.parkingLotId,
-        momentParkingTime.format(Config.Time.INPUT_FORMAT),
-        data.pricingId
-    ];
-    return yield Utils.Db.execute(query, parameteriezedValues);
+    const parameterizedValues = getValuesForCreateRecord(record);
+    return yield Utils.Db.execute(query, parameterizedValues);
 };
 
-module.exports.calculateEarningByParkingLotId = function* (parkingLotId, hours) {
+module.exports.bulkCreate = function* (records) {
+    const parameterizedValues = records.map(getValuesForCreateRecord);
+    const subquery = Array(parameterizedValues.length + 1).join(' (?, ?, ?, ?, ?, ?),');
+    const query =
+        'INSERT INTO cars (id, brand, licensePlate, ' +
+        'parkingLotId, parkingTime, pricingId) VALUES' + subquery.replace(/,$/, ';');
+    return yield Utils.Db.execute(query, _.flatten(parameterizedValues));
+};
+
+module.exports.calculateEarningByParkingLotId = function* (parkingLotId, hoursPassed) {
     if (!parkingLotId) {
         return [];
     }
 
-    const time = moment.utc().format(Config.Time.INPUT_FORMAT);
+    const time = moment.utc().add(hoursPassed, 'hours').format(Config.Time.INPUT_FORMAT);
     const query =
         'SELECT t.brand, t.licensePlate, t.formattedParkingTime AS parkingTime, t.value, t.discountInCents FROM (' +
             'SELECT brand, licensePlate, ' +
@@ -39,16 +52,16 @@ module.exports.calculateEarningByParkingLotId = function* (parkingLotId, hours) 
             'FROM cars ' +
             'INNER JOIN pricing ON cars.pricingId = pricing.id ' +
             'WHERE cars.parkingLotId = ?) AS t;';
-    const parameteriezedValues = [
+    const parameterizedValues = [
         Config.Time.DB_FORMAT,
         time,
         parkingLotId
     ];
-    return yield Utils.Db.execute(query, parameteriezedValues);
+    return yield Utils.Db.execute(query, parameterizedValues);
 };
 
-module.exports.calculateEarning = function* (hours) {
-    const time = moment.utc().format(Config.Time.INPUT_FORMAT);
+module.exports.calculateEarning = function* (hoursPassed) {
+    const time = moment.utc().add(hoursPassed, 'hours').format(Config.Time.INPUT_FORMAT);
     const query =
         'SELECT count(*) AS totalAmountOfCars, SUM(t.value) / 100 AS `value`, SUM(t.discountInCents) AS discountInCents FROM (' +
             'SELECT ' +
@@ -58,8 +71,10 @@ module.exports.calculateEarning = function* (hours) {
                 '((pricing.standardPricingInCents * @hoursPassed) - @discount) AS `value` ' +
             'FROM cars ' +
             'INNER JOIN pricing ON cars.pricingId = pricing.id) AS t;';
-    const parameteriezedValues = [
+    const parameterizedValues = [
         time
     ];
-    return yield Utils.Db.execute(query, parameteriezedValues);
+    return yield Utils.Db.execute(query, parameterizedValues);
 };
+
+module.exports.getValuesForCreateRecord = getValuesForCreateRecord;

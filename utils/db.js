@@ -29,7 +29,5 @@ module.exports.execute = function* (query, parameterizedValues) {
         throw error;
     }
 
-    if (result) {
-        return result;
-    }
+    return result;
 };
