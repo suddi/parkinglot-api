@@ -5,6 +5,6 @@ node_js:
 sudo: required
 services: mysql
 before_install:
-  - mysql -u root -e "CREATE DATABASE parkinglot";
+  - mysql -u root -e "CREATE DATABASE parkinglot;"
 after_script:
     - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN > /dev/null

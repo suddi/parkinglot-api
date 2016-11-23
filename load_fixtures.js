@@ -22,7 +22,7 @@ function* importFixtures(data) {
     yield Model.Pricing.create(Config.Db.DEFAULT_PRICING);
     const camelCaseRecord = records.map(mapCarToCamelCase);
     yield Model.Car.bulkCreate(camelCaseRecord);
-    console.log('Successfully imported ' + records.length + ' records ');
+    console.log('Successfully imported ' + records.length + ' records');
 }
 
 function* readXml(filename) {
@@ -33,8 +33,12 @@ function* readXml(filename) {
 
 function* load() {
     const filename = process.argv[2];
-    const data = yield readXml(filename);
-    yield importFixtures(data);
+    if (filename) {
+        const data = yield readXml(filename);
+        yield importFixtures(data);
+    } else {
+        console.log('Please provide path to a XML file in ' + Config.Directory.FIXTURES);
+    }
 }
 
 if (!module.parent) {

@@ -11,16 +11,31 @@ function getConnectionConfig() {
         return {
             host: 'localhost',
             user: 'root',
-            database: 'parkinglot',
             connectionLimit: 10
         };
     }
-    return Config.Db.MYSQL_CONNECTION;
+    return Config.Db.MYSQL_CONNECTION_FOR_TESTING;
 }
 
-function* dropTable(parameterizedValues) {
-    const query = 'DROP TABLE IF EXISTS example;';
-    yield Util.Db.execute(query, parameterizedValues);
+function* createDb() {
+    const query = 'CREATE DATABASE testexample;';
+    const result = yield Util.Db.execute(query);
+
+    expect(result.affectedRows).to.eql(1);
+}
+
+function* useDb() {
+    const query = 'USE testexample;';
+    const result = yield Util.Db.execute(query);
+
+    expect(result.affectedRows).to.eql(0);
+}
+
+function* dropDb() {
+    const query = 'DROP DATABASE testexample;';
+    const result = yield Util.Db.execute(query);
+
+    expect(result.affectedRows).to.eql(0);
 }
 
 function* createTableQuery(parameterizedValues) {
@@ -32,6 +47,11 @@ function* createTableQuery(parameterizedValues) {
     const result = yield Util.Db.execute(query, parameterizedValues);
 
     expect(result.affectedRows).to.eql(0);
+}
+
+function* dropTable(parameterizedValues) {
+    const query = 'DROP TABLE IF EXISTS example;';
+    yield Util.Db.execute(query, parameterizedValues);
 }
 
 function* insertQuery(parameterizedValues) {
@@ -69,41 +89,45 @@ describe('Testing Util.Db', function () {
     });
 
     describe('Testing Util.Db.execute', function () {
-        it('CASE 1: Able to execute query successfully', function* () {
-            // Repeating connection, so that tests are isolated
+        before(function* () {
             Util.Db.connect(getConnectionConfig());
+            yield createDb();
+            yield useDb();
+        });
+
+        beforeEach(function* () {
+            yield createTableQuery();
+        });
+
+        afterEach(function* () {
+            yield dropTable();
+        });
+
+        after(function* () {
+            yield dropDb();
+            Util.Db.disconnect();
+        });
+
+        it('CASE 1: Able to execute query successfully', function* () {
             const input = 42;
 
-            yield dropTable();
-            yield createTableQuery();
             yield insertQuery([input]);
             yield selectQuery([], input);
-            yield dropTable();
-
-            Util.Db.disconnect();
         });
 
         it('CASE 2: Protected against SQL injection using parameterizedValues', function* () {
-            // Repeating connection, so that tests are isolated
-            Util.Db.connect(getConnectionConfig());
             const input1 = 42;
             const input2 = 43;
 
-            yield dropTable();
-            yield createTableQuery();
             yield insertQuery([input1]);
             yield insertQuery([input2]);
             yield selectWhereQuery([input1 + ' or 1 = 1'], input1);
-            yield dropTable();
-
-            Util.Db.disconnect();
         });
 
         it('CASE 3: Connection throws error', function* () {
-            // Repeating connection, so that tests are isolated
-            Util.Db.connect(getConnectionConfig());
             let error;
 
+            yield dropTable();
             try {
                 yield insertQuery(42);
             } catch (err) {
@@ -111,8 +135,6 @@ describe('Testing Util.Db', function () {
             }
 
             expect(error.code).to.be.eql('ER_NO_SUCH_TABLE');
-
-            Util.Db.disconnect();
         });
     });
 });

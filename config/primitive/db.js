@@ -8,6 +8,15 @@ module.exports = function (env, rootDir) {
             user: 'root',
             password: 'root',
             database: 'parkinglot',
+            port: 8889,
+            connectionLimit: 10
+        },
+
+        MYSQL_CONNECTION_FOR_TESTING: {
+            host: 'localhost',
+            user: 'root',
+            password: 'root',
+            port: 8889,
             connectionLimit: 10
         },
 
