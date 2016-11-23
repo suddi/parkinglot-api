@@ -1,7 +1,7 @@
 --
 -- Table structure for table `credentials`
 --
-CREATE TABLE `credentials` (
+CREATE TABLE IF NOT EXISTS `credentials` (
     `id` varchar(40) NOT NULL,
     `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -13,7 +13,7 @@ INSERT IGNORE INTO credentials (id) VALUES ("3299cd19-9960-4de4-a737-3882bfca64f
 --
 -- Table structure for table `pricing`
 --
-CREATE TABLE `pricing` (
+CREATE TABLE IF NOT EXISTS `pricing` (
     `id` int(11) unsigned NOT NULL,
     `currency` varchar(3) NOT NULL DEFAULT "EUR",
     `standardPricingInCents` int(11) unsigned NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE `pricing` (
 --
 -- Table structure for table `cars`
 --
-CREATE TABLE `cars` (
+CREATE TABLE IF NOT EXISTS `cars` (
     `id` varchar(100) NOT NULL,
     `brand` varchar(100) DEFAULT NULL,
     `licensePlate` varchar(100) NOT NULL,
@@ -42,3 +42,15 @@ CREATE TABLE `cars` (
     KEY `fk_pricingId_idx` (`pricingId`),
     CONSTRAINT `fk_pricingId` FOREIGN KEY (`pricingId`) REFERENCES `pricing` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DELIMITER $$
+
+CREATE TRIGGER limitCarsPerParkingLot BEFORE INSERT ON cars
+    FOR EACH ROW
+    BEGIN
+        IF (SELECT COUNT(*) FROM cars WHERE cars.parkingLotId = NEW.parkingLotId) = 23 THEN
+            SIGNAL SQLSTATE '99999' SET MESSAGE_TEXT = 'Maximum limit of 23 cars per parking lot';
+        END IF;
+    END$$
+
+DELIMITER ;
