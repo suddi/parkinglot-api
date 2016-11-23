@@ -3,77 +3,25 @@
 require('co-mocha');
 const expect = require('chai').expect;
 
-const Config = require('../../../../config');
 const Util = require('../../../../utils');
+const DbUtil = require('../../../db_utils');
 const Model = require('../../../../app/v1/model');
 
-function getConnectionConfig() {
-    if (Config.Env.CI) {
-        return {
-            host: 'localhost',
-            user: 'root',
-            connectionLimit: 10
-        };
-    }
-    return Config.Db.MYSQL_CONNECTION_FOR_TESTING;
-}
-
-function* createDb() {
-    const query = 'CREATE DATABASE testexample;';
-    const result = yield Util.Db.execute(query);
-
-    expect(result.affectedRows).to.eql(1);
-}
-
-function* useDb() {
-    const query = 'USE testexample;';
-    const result = yield Util.Db.execute(query);
-
-    expect(result.affectedRows).to.eql(0);
-}
-
-function* dropDb() {
-    const query = 'DROP DATABASE testexample;';
-    const result = yield Util.Db.execute(query);
-
-    expect(result.affectedRows).to.eql(0);
-}
-
-function* createTable(parameterizedValues) {
-    const query =
-        'CREATE TABLE credentials (' +
-            '`id` int(4) NOT NULL, ' +
-            'PRIMARY KEY (`id`) ' +
-        ') ENGINE=InnoDB DEFAULT CHARSET=utf8;';
-    const result = yield Util.Db.execute(query, parameterizedValues);
-
-    expect(result.affectedRows).to.eql(0);
-}
-
-function* dropTable(parameterizedValues) {
-    const query = 'DROP TABLE IF EXISTS credentials;';
-    yield Util.Db.execute(query, parameterizedValues);
-}
-
-function* insertQuery(parameterizedValues) {
-    const query = 'INSERT INTO credentials (id) VALUES (?);';
-    const result = yield Util.Db.execute(query, parameterizedValues);
-
-    expect(result.affectedRows).to.eql(1);
-}
+const DBNAME = 'testexample';
+const TABLENAME = 'credentials';
 
 describe('Integration Tests for Model.Credentials', function () {
     describe('Testing Model.Credentials.authenticate', function () {
         before(function* () {
-            Util.Db.connect(getConnectionConfig());
-            yield createDb();
-            yield useDb();
-            yield createTable();
+            Util.Db.connect(DbUtil.getConnectionConfig());
+            yield DbUtil.createDb(DBNAME);
+            yield DbUtil.useDb(DBNAME);
+            yield DbUtil.createTable(TABLENAME);
         });
 
         after(function* () {
-            yield dropTable();
-            yield dropDb();
+            yield DbUtil.dropTable(TABLENAME);
+            yield DbUtil.dropDb(DBNAME);
             Util.Db.disconnect();
         });
 
@@ -91,7 +39,7 @@ describe('Integration Tests for Model.Credentials', function () {
 
         it('CASE 3: Credentials is validated correctly', function* () {
             const apiKey = 'abc';
-            yield insertQuery([apiKey]);
+            yield DbUtil.insert(TABLENAME, [apiKey]);
 
             const result = yield Model.Credentials.authenticate(apiKey);
 
