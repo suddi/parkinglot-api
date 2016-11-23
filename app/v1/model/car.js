@@ -84,7 +84,11 @@ module.exports.calculateEarning = function* (hoursPassed) {
     const parameterizedValues = [
         time
     ];
-    return yield Utils.Db.execute(query, parameterizedValues);
+    const result = yield Utils.Db.execute(query, parameterizedValues);
+    if (!result.length) {
+        return {};
+    }
+    return result[0];
 };
 
 module.exports.getValuesForCreateRecord = getValuesForCreateRecord;

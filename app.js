@@ -5,6 +5,7 @@ const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const compress = require('koa-compress');
 const logger = require('koa-logger');
+const cors = require('kcors');
 
 const Config = require('./config');
 const getRoutes = require('./app/v1/routes');
@@ -16,6 +17,7 @@ function bootstrap(apiConfig) {
     app.use(Middleware.ErrorHandling.handle);
     app.use(logger());
     app.use(compress());
+    app.use(cors());
     app.use(bodyParser());
     app.use(Middleware.RateLimiter.include());
 

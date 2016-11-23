@@ -12,5 +12,6 @@ module.exports = function () {
     routerKeys.map(function (routerKey) {
         return getRouters[routerKey](router);
     });
+
     return router.routes();
 };
