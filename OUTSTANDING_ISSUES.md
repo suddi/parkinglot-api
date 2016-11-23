@@ -11,3 +11,7 @@ Due to time limitations, I have not completed all the issues to deliver a comple
   * I would typically handle validation using JSON schema or RAML
 * Testing is limited
   * I was not able to write comprehensive tests to cover all the necessary cases
+* There is no API versioning
+  * Even though within the folder structure, I have included it as `v1`, there paths themselves do not have this, this is to fulfil requirements
+* Pricing has not been handled so that it is subject to change
+  * I have added pricing as a separate table, but it ideally needs to be able to be subject to change as prices vary
