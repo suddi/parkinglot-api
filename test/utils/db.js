@@ -38,7 +38,7 @@ function* dropDb() {
     expect(result.affectedRows).to.eql(0);
 }
 
-function* createTableQuery(parameterizedValues) {
+function* createTable(parameterizedValues) {
     const query =
         'CREATE TABLE example (' +
             '`id` int(4) NOT NULL, ' +
@@ -77,7 +77,7 @@ function* selectWhereQuery(parameterizedValues, expectedValue) {
     expect(result[0].id).to.eql(expectedValue);
 }
 
-describe('Testing Util.Db', function () {
+describe('Integration Tests for Util.Db', function () {
     describe('Testing Util.Db.connect', function () {
         it('CASE 1: Able to get pool given config', function () {
             const result = Util.Db.connect(getConnectionConfig());
@@ -96,7 +96,7 @@ describe('Testing Util.Db', function () {
         });
 
         beforeEach(function* () {
-            yield createTableQuery();
+            yield createTable();
         });
 
         afterEach(function* () {

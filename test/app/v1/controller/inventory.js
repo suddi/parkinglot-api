@@ -8,7 +8,7 @@ const Controller = require('../../../../app/v1/controller');
 const Model = require('../../../../app/v1/model');
 const Enum = require('../../../../enum');
 
-describe('Testing Controller.Inventory', function () {
+describe('Unit Tests for Controller.Inventory', function () {
     let sandbox;
 
     beforeEach(function () {

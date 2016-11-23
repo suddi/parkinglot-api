@@ -7,7 +7,7 @@ const Util = require('../../utils');
 
 const INPUT_XML = '<a><b c="4" c="5" d="7">hello</b></a>';
 
-describe('Testing Util.XmlParser', function () {
+describe('Unit Tests for Util.XmlParser', function () {
     describe('Testing Util.XmlParser.parseString', function () {
         it('CASE 1: Works correctly with default options', function* () {
             const result = yield Util.XmlParser.parseString(INPUT_XML);

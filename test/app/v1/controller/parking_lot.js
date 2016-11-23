@@ -8,7 +8,7 @@ const Controller = require('../../../../app/v1/controller');
 const Model = require('../../../../app/v1/model');
 const Enum = require('../../../../enum');
 
-describe('Testing Controller.ParkingLot', function () {
+describe('Unit Tests for Controller.ParkingLot', function () {
     describe('Testing Controller.ParkingLot.get', function () {
         let sandbox;
 
