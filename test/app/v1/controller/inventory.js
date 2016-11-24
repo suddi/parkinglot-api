@@ -53,5 +53,5 @@ describe('Unit Tests for Controller.Inventory', function () {
 
         expect(this.body.status).to.deep.eql(Enum.Status.OK);
         expect(this.body.data).to.deep.eql(body);
-    }.bind(this));
+    });
 });
