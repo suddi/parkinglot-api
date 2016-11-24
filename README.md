@@ -28,6 +28,9 @@ Please create a database in mysql and load the [SQL schema file](/scripts/schema
 Once these have been installed, please run:
 
 ````sh
+# This may be skipped if you used used setup.sh to setup node.js
+npm install -g pm2
+
 npm install
 ````
 
@@ -86,7 +89,7 @@ To run the linter, tests and generate code coverage:
 # To execute the linter separately
 npm run lint
 
-# To execute all 3
+# To execute linter, tests and generate code coverage
 npm test
 ````
 
