@@ -31,6 +31,7 @@ Once these have been installed, please run:
 # This may be skipped if you used used setup.sh to setup node.js
 npm install -g pm2
 
+# For development environment, can execute API with nodemon or pm2
 npm install
 ````
 
