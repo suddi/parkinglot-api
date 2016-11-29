@@ -54,7 +54,7 @@ module.exports.calculateEarningByParkingLotId = function* (parkingLotId, hoursPa
     const query =
         'SELECT t.brand, t.licensePlate, t.formattedParkingTime AS parkingTime, t.value, t.discountInCents FROM (' +
             'SELECT brand, licensePlate, ' +
-                'DATE_FORMAT(parkingTime, "?") AS formattedParkingTime, ' +
+                'DATE_FORMAT(parkingTime, ?) AS formattedParkingTime, ' +
                 '@hoursPassed := FLOOR((UNIX_TIMESTAMP(?) - UNIX_TIMESTAMP(parkingTime)) / 3600) AS hoursPassed, ' +
                 '@discountedHours := IF(@hoursPassed > pricing.discountAppliedAfter, @hoursPassed - pricing.discountAppliedAfter, 0) AS discountedHours, ' +
                 '@discount := pricing.discountPricingInCents * @discountedHours AS discountInCents, ' +
