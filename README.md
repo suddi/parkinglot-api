@@ -1,5 +1,6 @@
 # Parking Lot API
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/78fca57f78334b20b5a23cb9090977b0)](https://www.codacy.com/app/Suddi/parkinglot-api?utm_source=github.com&utm_medium=referral&utm_content=suddi/parkinglot-api&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/suddi/parkinglot-api.svg?branch=master)](https://travis-ci.org/suddi/parkinglot-api)
 [![codecov](https://codecov.io/gh/suddi/parkinglot/branch/master/graph/badge.svg)](https://codecov.io/gh/suddi/parkinglot)
 [![license](https://img.shields.io/github/license/suddi/parkinglot.svg)](https://github.com/suddi/parkinglot/LICENSE)
