@@ -2,27 +2,27 @@
 
 function getStatusEnums() {
     return {
-        'OK': {
+        OK: {
             code: 200,
             message: 'OK'
         },
 
-        'UNAUTHORIZED': {
+        UNAUTHORIZED: {
             code: 401,
             message: 'Invalid URL Or API Key'
         },
 
-        'TOO_MANY_REQUESTS': {
+        TOO_MANY_REQUESTS: {
             code: 429,
             message: 'Too Many Requests'
         },
 
-        'FORBIDDEN': {
+        FORBIDDEN: {
             code: 403,
             message: 'The Requested Action Cannot Be Performed'
         },
 
-        'INTERNAL_ERROR': {
+        INTERNAL_ERROR: {
             code: 500,
             message: 'Internal Error'
         }
