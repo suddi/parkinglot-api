@@ -33,7 +33,7 @@
     "docker-down": "docker-compose down",
     "load-fixtures": "node load_fixtures.js",
     "lint": "eslint .",
-    "prepush": "npm run lint",
+    "prepush": "npm test",
     "security-check": "nsp check --output summary",
     "setup": ". ./setup.sh",
     "start": "nodemon app.js",

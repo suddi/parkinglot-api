@@ -7,7 +7,7 @@ reporting:
 check:
     global:
         statements: 70
-        branches: 50
+        branches: 40
     each:
         statements: 20
         branches: 0
