@@ -1,6 +1,5 @@
 'use strict';
 
-const co = require('co');
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const compress = require('koa-compress');
@@ -23,18 +22,18 @@ function bootstrap(apiConfig) {
 
     app.use(getRoutes());
     app.listen(apiConfig.PORT);
-    console.log('API running on port ' + apiConfig.PORT);
+    console.log(`API running on port ${apiConfig.PORT}`);
 }
 
 if (!module.parent) {
-    co(function* () {
+    try {
         Utils.Db.connect(Config.Db.MYSQL_CONNECTION);
         bootstrap(Config.Api);
-    }).catch(function (err) {
+    } catch (error) {
         console.log('API failed to start');
-        console.log(err.message);
-        console.log(err.stack);
-    });
+        console.log(error.message);
+        console.log(error.stack);
+    }
 }
 
 // For unit testing purposes

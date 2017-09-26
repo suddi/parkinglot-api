@@ -2,6 +2,6 @@
 
 module.exports = function (env, rootDir) {
     return {
-        FIXTURES: rootDir + '/fixtures'
+        FIXTURES: `${rootDir}/fixtures`
     };
 };

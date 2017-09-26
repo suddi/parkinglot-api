@@ -1,0 +1,13 @@
+verbose: false
+reporting:
+    reports:
+        - lcov
+        - json
+        - text
+check:
+    global:
+        statements: 70
+        branches: 40
+    each:
+        statements: 20
+        branches: 0

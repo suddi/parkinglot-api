@@ -56,7 +56,7 @@ describe('Integration Tests for Util.Db', function () {
 
             yield DbUtil.insert(TABLENAME, [input1]);
             yield DbUtil.insert(TABLENAME, [input2]);
-            const result = yield DbUtil.selectWhere(TABLENAME, [input1 + ' or 1 = 1']);
+            const result = yield DbUtil.selectWhere(TABLENAME, [`${input1} OR 1 = 1`]);
 
             expect(result.length).to.eql(1);
             expect(result[0].id).to.eql(input1);

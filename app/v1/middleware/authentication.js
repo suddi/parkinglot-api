@@ -8,5 +8,5 @@ module.exports.validate = function* (next) {
     if (!isValid) {
         return this.throw(Enum.Status.UNAUTHORIZED);
     }
-    yield next;
+    return yield next;
 };

@@ -22,11 +22,11 @@ function* importFixtures(data) {
     yield Model.Pricing.create(Config.Db.DEFAULT_PRICING);
     const camelCaseRecord = records.map(mapCarToCamelCase);
     yield Model.Car.bulkCreate(camelCaseRecord);
-    console.log('Successfully imported ' + records.length + ' records');
+    console.log(`Successfully imported ${records.length} records`);
 }
 
 function* readXml(filename) {
-    const fullPath = Config.Directory.FIXTURES + '/' + filename;
+    const fullPath = `${Config.Directory.FIXTURES}/${filename}`;
     const xmlString = fs.readFileSync(fullPath);
     return yield Utils.XmlParser.parseString(xmlString);
 }
@@ -37,7 +37,7 @@ function* load() {
         const data = yield readXml(filename);
         yield importFixtures(data);
     } else {
-        console.log('Please provide path to a XML file in ' + Config.Directory.FIXTURES);
+        console.log(`Please provide path to a XML file in ${Config.Directory.FIXTURES}`);
     }
 }
 
