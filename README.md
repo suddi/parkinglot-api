@@ -1,7 +1,10 @@
 # Parking Lot API
 
 [![Build Status](https://travis-ci.org/suddi/parkinglot.svg?branch=master)](https://travis-ci.org/suddi/parkinglot)
-[![codecov](https://codecov.io/gh/suddi/parkinglot/branch/master/graph/badge.svg)](https://codecov.io/gh/suddi/parkinglot)
+[![codecov](https://codecov.io/gh/suddi/parkinglot-api/branch/master/graph/badge.svg)](https://codecov.io/gh/suddi/parkinglot-api)
+[![Greenkeeper badge](https://badges.greenkeeper.io/suddi/parkinglot-api.svg)](https://greenkeeper.io/)
+[![David](https://img.shields.io/david/suddi/parkinglot-api.svg)](https://david-dm.org/suddi/parkinglot-api)
+[![David](https://img.shields.io/david/dev/suddi/parkinglot-api.svg)](https://david-dm.org/suddi/parkinglot-api?type=dev)
 [![license](https://img.shields.io/github/license/suddi/parkinglot.svg)](https://github.com/suddi/parkinglot/LICENSE)
 
 ## Setup
