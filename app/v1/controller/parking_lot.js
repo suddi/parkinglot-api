@@ -7,8 +7,8 @@ module.exports.get = function* () {
     this.body = {
         status: Enum.Status.OK,
         data: yield Model.Car.calculateEarningByParkingLotId(
-                this.params.parkingLotId,
-                this.params.hoursPassed || 0
+            this.params.parkingLotId,
+            this.params.hoursPassed || 0
         )
     };
 };

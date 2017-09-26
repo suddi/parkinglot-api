@@ -11,7 +11,7 @@ function getValuesForCreateRecord(record) {
     const momentParkingTime = moment.utc(record.parkingTime);
     const unixtime = momentParkingTime.valueOf() / 1000;
     return [
-        record.licensePlate + '-' + unixtime,
+        `${record.licensePlate}-${unixtime}`,
         record.brand,
         record.licensePlate,
         record.parkingLotId,
@@ -37,7 +37,7 @@ module.exports.bulkCreate = function* (records) {
     const subquery = Array(parameterizedValues.length + 1).join(' (?, ?, ?, ?, ?, ?),');
     const query =
         'INSERT INTO cars (id, brand, licensePlate, ' +
-        'parkingLotId, parkingTime, pricingId) VALUES' + subquery.replace(/,$/, ';');
+        `parkingLotId, parkingTime, pricingId) VALUES ${subquery.replace(/,$/, ';')}`;
     const result = yield Utils.Db.execute(query, _.flatten(parameterizedValues));
     if (!result.affectedRows) {
         throw Enum.Status.INTERNAL_ERROR;
