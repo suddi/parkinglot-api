@@ -37,23 +37,26 @@
     "security-check": "nsp check --output summary",
     "setup": ". ./setup.sh",
     "start": "nodemon app.js",
-    "test": "npm run lint && npm run coverage && npm run check-coverage"
+    "test": "npm run lint && npm run coverage && npm run check-coverage",
+    "prepare": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "dependencies": {
     "co": "^4.0.0",
-    "ioredis": "^3.1.4",
+    "ioredis": "^4.27.8",
     "kcors": "^2.2.1",
-    "koa": "^2.3.0",
+    "koa": "^1.4.1",
     "koa-bodyparser": "^4.2.0",
     "koa-compress": "^2.0.0",
     "koa-logger": "^3.1.0",
-    "koa-ratelimit": "^4.0.0",
+    "koa-ratelimit": "^4.1.0",
     "koa-router": "^7.2.1",
     "load-directory": "^2.0.0",
-    "lodash": "^4.0.0",
-    "moment": "^2.0.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "promise-mysql": "^3.1.0",
-    "xml2js": "^0.4.0"
+    "xml2js": "^0.4.0",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {
     "chai": "^4.0.0",
@@ -69,5 +72,6 @@
   },
   "eslintConfig": {
     "extends": "suddi/backend"
-  }
+  },
+  "snyk": true
 }
